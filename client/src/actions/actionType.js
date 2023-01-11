@@ -1,0 +1,5 @@
+export const ActionType = {
+  USER_FETCH: "USER_FETCH",
+  CREATE_USER: "CREATE USER",
+  FETCH_PRODUCTS: "FETCH_PRODUCTS",
+};
