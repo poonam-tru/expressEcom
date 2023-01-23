@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,6 @@ import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import { CssBaseline } from '@mui/material';
-import {Grid} from '@mui/material';
-import { Link } from 'react-router-dom';
 
 function SignupPage() {
 
@@ -24,10 +22,10 @@ function SignupPage() {
                 <CssBaseline />
                 <Box
                 sx={{
-                    height: 500,
-                    backgroundColor: '#dddddd',
-                    borderRadius:"20px",
-                    marginTop: 8,
+                    // height: 500,
+                    backgroundColor: '#eeee',
+                    borderRadius:"10px",
+                    marginTop: 6,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -90,17 +88,6 @@ function SignupPage() {
                 sx={{ mt: 3, mb: 2 }}
                 >Create Account</Button>
 
-                {/* <Grid container>
-                    <Grid item>
-                        <Grid item>
-                        "Don't have an account?
-                        </Grid>
-                        <Link to="/signup" variant="body2">
-                        {"Sign Up"}
-                        </Link>
-                    </Grid>
-                </Grid>
-             */}
                 </Box>
                 </Box>
             </Container>

@@ -22,7 +22,7 @@ export default function Allproducts() {
                       theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
                   }}>
                     <h3 style={{ margin: 0 , padding: '10px 0px' , borderBottom: '1px solid #ddd'}}>{u.prdName}</h3>
-                    <img style={{ display: 'block', width: '100%' , borderRadius:"20px"}} src={u.img}/>
+                    <img alt='' style={{ display: 'block', width: '100%' , borderRadius:"20px"}} src={u.img}/>
 
                 </Paper>
               </Link>
