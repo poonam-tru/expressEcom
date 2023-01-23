@@ -14,26 +14,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchValidateUser, logoutValidateUser } from "../actions/user";
 
 function HomePage() {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    // const getUser = localStorage.getItem("user");
-    const [username, setUsername] = useState("");
-    // console.log(getUser, "user");
-    const dispatch = useDispatch();
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    borderRadius: '15px',
+    boxShadow: 24,
+    p: 4,
+  }
+
+  const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
   
-    const { register, handleSubmit } = useForm();
-    const onSubmit = (data) => {
-      console.log(data);
-      dispatch(fetchValidateUser(data));
-      setUsername(localStorage.getItem("user"));
-      setOpen(false);
-    };
+  const { register, handleSubmit, reset } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    dispatch(fetchValidateUser(data));
+    reset();
+  };
   
-    const handleLogout = () => {
-      dispatch(logoutValidateUser());
-      setUsername("");
-    };
+  const handleLogout = () => {
+    dispatch(logoutValidateUser());
+    setUsername("");
+  };
   
     useEffect(() => {}, [username]);
 
@@ -56,25 +66,30 @@ function HomePage() {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description">
 
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                sx={{
-                    // height: 470,
-                    backgroundColor: 'white',
-                    borderRadius:"10px",
-                    marginTop: 5,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    padding:"40px",
-                    justifyContent:"center"
-                }}
-                >
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+<Box sx={style}>
+
+      <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                // width: 400,
+                height: 458,
+                marginTop: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderRadius: "20px",
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                Sign
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+                sx={{ mt: 1 }}
+              >
                 <TextField
                 margin="normal"
                 required
@@ -140,6 +155,7 @@ function HomePage() {
                 </Box>
             </Box>
             </Container>
+            </Box>
         </Modal>
     </div>
   )
