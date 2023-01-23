@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -10,21 +10,41 @@ import Container from '@mui/material/Container';
 import { CssBaseline, Grid, Modal } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+import { useDispatch, useSelector } from "react-redux";
+import { fetchValidateUser, logoutValidateUser } from "../actions/user";
+
 function HomePage() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    const { register, handleSubmit,reset } = useForm();
-    const onSubmit = (data) =>{
-        console.log(data)
-        reset()
+    // const getUser = localStorage.getItem("user");
+    const [username, setUsername] = useState("");
+    // console.log(getUser, "user");
+    const dispatch = useDispatch();
+  
+    const { register, handleSubmit } = useForm();
+    const onSubmit = (data) => {
+      console.log(data);
+      dispatch(fetchValidateUser(data));
+      setUsername(localStorage.getItem("user"));
+      setOpen(false);
     };
+  
+    const handleLogout = () => {
+      dispatch(logoutValidateUser());
+      setUsername("");
+    };
+  
+    useEffect(() => {}, [username]);
 
   return (
     <div>
-    <h2>Welcome To HomePage</h2>
+      <h2>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
+      {username ? (
+        <Button onClick={handleLogout}>Logout</Button>
+      ) : (
         <Button onClick={handleOpen}>Sign In</Button>
+      )}
 
         <Link to='/allprd'>
             <Button>All Products</Button>

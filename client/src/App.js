@@ -1,12 +1,13 @@
-import React from 'react'
-import NewRoutes from './Routes/NewRoutes'
-
+import React from "react";
+import NewRoutes from "./Routes/NewRoutes";
+import { Provider } from "react-redux";
+import store from "./store";
 function App() {
   return (
-    <div>
+    <Provider store={store}>
       <NewRoutes />
-    </div>
-  )
+    </Provider>
+  );
 }
 
-export default App
+export default App;

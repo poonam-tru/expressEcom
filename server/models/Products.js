@@ -42,6 +42,10 @@ const ProductSchema = Schema({
         type: Number,
         required:true,
     },
+    src:{
+        type:String,
+        required:true,
+    }
 })
 
 const ProductsModel = mongoose.model('Products', ProductSchema)
