@@ -8,6 +8,19 @@ export function fetchUserData(user) {
     user,
   };
 }
+export function logoutUserData() {
+  return {
+    type: ActionType.USER_LOGOUT,
+  };
+}
+
+export function fetchUserDataSuccess(success) {
+  console.log(success, "i---");
+  return {
+    type: ActionType.USER_FETCH_SUCCESS,
+    success,
+  };
+}
 
 export function createUserData(user) {
   return {
@@ -25,13 +38,24 @@ export function fetchValidateUser(data) {
       .post("http://localhost:3002/login", data)
       .then((res) => {
         // const { email } = res.data;
-        console.log("email", res.data);
-        dispatch(fetchUserData(res.data));
+        console.log("email", res.data.contact);
+        dispatch(
+          fetchUserData({ username: res.data.username, email: res.data.email })
+        );
+        dispatch(fetchUserDataSuccess(true));
+        localStorage.setItem("user", res.data.username);
       })
       .catch((err) => console.log(err, "fetching user"));
   };
 }
-
+export function logoutValidateUser() {
+  return (dispatch) => {
+    dispatch(logoutUserData());
+    dispatch(fetchUserData({}));
+    dispatch(fetchUserDataSuccess(false));
+    localStorage.clear();
+  };
+}
 //function to create new user
 export function createNewUser(data) {
   return (dispatch) => {

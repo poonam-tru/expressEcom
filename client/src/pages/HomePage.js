@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
-
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import { CssBaseline } from "@mui/material";
 import { Grid } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { fetchValidateUser } from "../actions/user";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchValidateUser, logoutValidateUser } from "../actions/user";
 
 const style = {
   position: "absolute",
@@ -29,24 +28,38 @@ export default function HomePage() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
+  // const getUser = localStorage.getItem("user");
+  const [username, setUsername] = useState("");
+  // console.log(getUser, "user");
   const dispatch = useDispatch();
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     console.log(data);
     dispatch(fetchValidateUser(data));
-    reset();
+    setUsername(localStorage.getItem("user"));
+    setOpen(false);
   };
+
+  const handleLogout = () => {
+    dispatch(logoutValidateUser());
+    setUsername("");
+  };
+
+  useEffect(() => {}, [username]);
 
   return (
     <div>
-      <h2>Welcome To HomePage</h2>
-      <Button onClick={handleOpen}>Sign In</Button>
+      <h2>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
+      {username ? (
+        <Button onClick={handleLogout}>Logout</Button>
+      ) : (
+        <Button onClick={handleOpen}>Sign In</Button>
+      )}
 
       <Link to="/allprd">
         <Button>All Products</Button>
       </Link>
-
       <Modal
         open={open}
         // onClose={handleClose}
