@@ -19,7 +19,7 @@ export default function Allproducts() {
             <Grid key={product.sku_id} item padding="20px">
               <Link
                 style={{ textDecoration: "none" }}
-                to={`/singleprd/${product.sku_id}`}
+                to={`/product/${product.sku_id}`}
               >
                 <Paper
                   sx={{

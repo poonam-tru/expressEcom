@@ -1,18 +1,24 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import allPrd from '../../API/allproducts.json'
-import { useParams } from 'react-router-dom';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getSingleProductsData } from "../../actions/products";
 
 export default function SingleProduct() {
-  const param = useParams()
-  console.log(param,"idd")
+  const param = useParams();
+  const product = useSelector((state) => state);
+  console.log(product, "product");
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(getSingleProductsData(param.id));
+  }, []);
 
   return (
     <div>
-    {allPrd.filter((itm=>itm.id === parseInt(param.id))).map((u)=>
+      {/* {allPrd.filter((itm=>itm.id === parseInt(param.id))).map((u)=>
       <Card key={u.id} sx={{ display: 'flex', justifyContent:'center',padding:"25px 0px", alignItems:'center' ,maxWidth:600, margin:'auto', width:'100%' }}>
       
         <CardMedia
@@ -30,7 +36,7 @@ export default function SingleProduct() {
           </CardContent>
         </Box>
       </Card>
-    )}
+    )} */}
     </div>
   );
 }

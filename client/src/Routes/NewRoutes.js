@@ -12,8 +12,8 @@ function NewRoutes() {
         <Routes>
           <Route exact path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/allprd" element={<AllProducts />} />
-          <Route path="/singleprd/:id" element={<SingleProduct />} />
+          <Route path="/products" element={<AllProducts />} />
+          <Route path="/product/:id" element={<SingleProduct />} />
         </Routes>
       </Router>
     </div>
