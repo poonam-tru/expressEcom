@@ -9,6 +9,8 @@ import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import { CssBaseline, Grid, Modal } from '@mui/material';
 import { Link } from 'react-router-dom';
+import landingPage from '../images/banner.jpg'
+import './HomePage.css'
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchValidateUser, logoutValidateUser } from "../actions/user";
@@ -20,11 +22,12 @@ function HomePage() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 440,
     bgcolor: 'background.paper',
     borderRadius: '15px',
     boxShadow: 24,
-    p: 4,
+    p: 3,
+    height:'auto'
   }
 
   const [open, setOpen] = useState(false);
@@ -48,13 +51,17 @@ function HomePage() {
     useEffect(() => {}, [username]);
 
   return (
-    <div>
-      <h2>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
+    <div className='home_page'>
+    {/* <img src={landingPage} alt=''/> */}
+      <h2 className='home_page_head'>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
+
+      <div>
       {username ? (
         <Button onClick={handleLogout}>Logout</Button>
       ) : (
         <Button onClick={handleOpen}>Sign In</Button>
       )}
+      </div>
 
         <Link to='/allprd'>
             <Button>All Products</Button>
@@ -73,7 +80,7 @@ function HomePage() {
             <Box
               sx={{
                 // width: 400,
-                height: 458,
+                height: 'auto',
                 marginTop: 0,
                 display: "flex",
                 flexDirection: "column",
@@ -81,8 +88,8 @@ function HomePage() {
                 borderRadius: "20px",
               }}
             >
-              <Typography component="h1" variant="h5">
-                Sign
+              <Typography component="h1" variant="h5" style={{fontSize:'24px'}}>
+                Sign In
               </Typography>
               <Box
                 component="form"
@@ -141,12 +148,23 @@ function HomePage() {
                 sx={{ mt: 3, mb: 2 }}
                 >Create Account</Button>
 
-                <Grid container>
+                <Grid container style={{padding:'15px 0px 0px'}}>
                     <Grid item>
-                        <Grid item>
-                        "Don't have an account?
-                            <Link to="/signup" variant="body2">
+                        <Grid item style={{fontSize:'17px'}}>
+                        Don't have an account?
+                            <Link to="/signup" variant="body2" style={{paddingLeft:'8px'}}>
                             {"Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <Grid container style={{padding:'15px 0px 15px'}}>
+                    <Grid item>
+                        <Grid item style={{fontSize:'17px'}}>
+                        Forgot your password?
+                            <Link to="/reset" variant="body2" style={{paddingLeft:'8px'}}>
+                            {"Reset It"}
                             </Link>
                         </Grid>
                     </Grid>

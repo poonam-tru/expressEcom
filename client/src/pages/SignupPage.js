@@ -22,15 +22,15 @@ function SignupPage() {
   };
 
   return (
-    <div>
-      <Container component="main" maxWidth="xs">
+    <div style={{backgroundColor:'#f6f9fc'}}>
+      <Container component="main" maxWidth="xs"style={{padding:'64px 24px 60px'}}>
         <CssBaseline />
         <Box
           sx={{
             height: 500,
-            backgroundColor: "#dddddd",
+            backgroundColor: "white",
             borderRadius: "20px",
-            marginTop: 8,
+            // marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -39,7 +39,7 @@ function SignupPage() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
           <Box
             component="form"
