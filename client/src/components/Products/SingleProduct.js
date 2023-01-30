@@ -9,7 +9,7 @@ import { getSingleProductsData } from "../../actions/products";
 
 export default function SingleProduct() {
   const param = useParams();
-  const product = useSelector((state) => state);
+  const product = useSelector((state) => state.singleProduct.product);
   console.log(product, "product");
   const dispatch = useDispatch();
   React.useEffect(() => {
@@ -18,25 +18,38 @@ export default function SingleProduct() {
 
   return (
     <div>
-      {/* {allPrd.filter((itm=>itm.id === parseInt(param.id))).map((u)=>
-      <Card key={u.id} sx={{ display: 'flex', justifyContent:'center',padding:"25px 0px", alignItems:'center' ,maxWidth:600, margin:'auto', width:'100%' }}>
-      
-        <CardMedia
+      <Card
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "25px 0px",
+          alignItems: "center",
+          maxWidth: 600,
+          margin: "auto",
+          width: "100%",
+        }}
+      >
+        {/* <CardMedia
           component="img"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
           image={u.img}
           alt=""
-        />
+        /> */}
 
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <CardContent sx={{ flex: '1 0 auto', padding:0, paddingBottom:'0px !important' }}>
-              <h2 style={{margin : 0 ,paddingBottom:25}}>{u.prdName}</h2>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <CardContent
+            sx={{
+              flex: "1 0 auto",
+              padding: 0,
+              paddingBottom: "0px !important",
+            }}
+          >
+            <h2 style={{ margin: 0, paddingBottom: 25 }}>{product.name}</h2>
 
-              <p style={{margin:0}}>{u.desc}</p>
+            <p style={{ margin: 0 }}>{product.description}</p>
           </CardContent>
         </Box>
       </Card>
-    )} */}
     </div>
   );
 }
