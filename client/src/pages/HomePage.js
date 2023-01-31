@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 
-
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import { CssBaseline, Grid, Modal } from '@mui/material';
@@ -53,19 +52,18 @@ function HomePage() {
   return (
     <div className='home_page'>
     {/* <img src={landingPage} alt=''/> */}
-      <h2 className='home_page_head'>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
-
-      <div>
-      {username ? (
-        <Button onClick={handleLogout}>Logout</Button>
-      ) : (
-        <Button onClick={handleOpen}>Sign In</Button>
-      )}
-      </div>
-
-        <Link to='/allprd'>
-            <Button>All Products</Button>
+    <div style={{backgroundColor:'white',display:'flex',justifyContent:'space-between',padding:'10px 40px'}}>
+        <Link to='/products'>
+          <Button onClick={handleOpen}>All Products</Button>
         </Link>
+        {username ? (
+          <Button onClick={handleLogout}>Logout</Button>
+        ) : (
+          <Button onClick={handleOpen}>Sign In</Button>
+        )}
+    </div>
+
+      <h2 className='home_page_head'>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
 
         <Modal
             open={open}

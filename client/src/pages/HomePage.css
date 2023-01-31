@@ -7,8 +7,13 @@
 }
 .home_page_head{
     margin: 0px;
-    font-size: 35px;
+    font-size: 65px;
     text-align: center;
     padding: 20px 0px;
     color: white;
+
+    position: absolute;
+    top: 35%;
+    left: 0px;
+    right: 0px;
 }
