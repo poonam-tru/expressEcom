@@ -12,16 +12,12 @@ mongoose.connect(
   "mongodb+srv://poonamsaini:Mysense123@clusterapp.i3gyhqu.mongodb.net/cloecom?retryWrites=true&w=majority "
 );
 
-// app.post("/createUser", async (req, res) => {
-//   const user = req.body;
-//   const newUser = new UserModel(user);
-//   await newUser.save();
-//   res.json(user);
-// });
-
 app.post("/login", (req, res) => {
-  console.log(req.body);
+  console.log(req.body, "body");
   const email = req.body.email;
+  // TODO check if mail & pass both are coming in body 
+
+  console.log(email, "i am here");
   UserModel.findOne({ email })
     .then((user) => {
       if (!user) {
@@ -33,6 +29,7 @@ app.post("/login", (req, res) => {
           if (!valid) {
             return res.status(401).json({ msg: "Incorrect Password." });
           }
+
           res.status(200).json(user);
         })
         .catch((error) => {
@@ -46,6 +43,8 @@ app.post("/login", (req, res) => {
 
 app.post("/createUser", async (req, res) => {
   console.log("create user1");
+  // TODO check if mail & pass both are coming in body 
+  // TODO check if mail already exists
   const saltRounds = 10;
   const plainTextPassword = req.body.password;
   const hash = bcrypt.hashSync(plainTextPassword, saltRounds);
@@ -56,7 +55,7 @@ app.post("/createUser", async (req, res) => {
   res.json(user);
 });
 
-app.get("/allProducts", (req, res) => {
+app.get("/products", (req, res) => {
   ProductsModel.find({}, (err, result) => {
     if (err) {
       res.json(err);
@@ -65,6 +64,18 @@ app.get("/allProducts", (req, res) => {
       res.json(result);
     }
   });
+});
+
+app.get("/product/:id", (req, res) => {
+  console.log(req.params.id, "i am ");
+  const sku_id = req.params.id;
+  ProductsModel.findOne({ sku_id })
+    .then((result) => {
+       return res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.listen("3002", () => {

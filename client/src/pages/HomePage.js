@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react'
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { useForm } from "react-hook-form";
 
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
@@ -13,9 +13,9 @@ import './HomePage.css'
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchValidateUser, logoutValidateUser } from "../actions/user";
+import { getUserCred } from "../utils/helpers";
 
 function HomePage() {
-
   const style = {
     position: 'absolute',
     top: '50%',
@@ -30,24 +30,23 @@ function HomePage() {
   }
 
   const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState(false);
+  const username = getUserCred();
+  console.log(username, "setup");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
-  
-  const { register, handleSubmit, reset } = useForm();
+  const navigate = useNavigate();
+
+  const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
-    dispatch(fetchValidateUser(data));
-    reset();
+    dispatch(fetchValidateUser(data, navigate));
+    setOpen(false);
   };
-  
+
   const handleLogout = () => {
-    dispatch(logoutValidateUser());
-    setUsername("");
+    dispatch(logoutValidateUser(navigate));
+
   };
-  
-    useEffect(() => {}, [username]);
 
   return (
     <div className='home_page'>
@@ -65,15 +64,14 @@ function HomePage() {
 
       <h2 className='home_page_head'>{username && `Hi, ${username}.`} Welcome To HomePage</h2>
 
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description">
-
-<Box sx={style}>
-
-      <Container component="main" maxWidth="xs">
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
               sx={{
@@ -96,65 +94,46 @@ function HomePage() {
                 sx={{ mt: 1 }}
               >
                 <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="off"
-                autoFocus
-                {...register("username", { required: true})}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="off"
+                  autoFocus
+                  {...register("email", { required: true })}
                 />
+
                 <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="off"
-                autoFocus
-                {...register("email", { required: true})}
-                />
-                <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="number"
-                label="Contact No."
-                name="number"
-                autoComplete="off"
-                autoFocus
-                {...register("number", { required: true})}
-                />
-                <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                {...register("password", { required: true})}
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  {...register("password", { required: true })}
                 />
                 <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                >Create Account</Button>
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Create Account
+                </Button>
 
                 <Grid container style={{padding:'15px 0px 0px'}}>
-                    <Grid item>
-                        <Grid item style={{fontSize:'17px'}}>
+                  <Grid item>
+                      <Grid item style={{fontSize:'17px'}}>
                         Don't have an account?
                             <Link to="/signup" variant="body2" style={{paddingLeft:'8px'}}>
                             {"Sign Up"}
                             </Link>
-                        </Grid>
-                    </Grid>
+                      </Grid>
+                  </Grid>
                 </Grid>
 
                 <Grid container style={{padding:'15px 0px 15px'}}>
@@ -170,11 +149,11 @@ function HomePage() {
 
                 </Box>
             </Box>
-            </Container>
-            </Box>
-        </Modal>
+          </Container>
+        </Box>
+      </Modal>
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

@@ -1,6 +1,6 @@
 import { ActionType } from "./actionType";
 import axios from "axios";
-
+import { removeCred, saveLoginCred } from "../utils/helpers";
 //function to set user data
 export function fetchUserData(user) {
   return {
@@ -15,7 +15,6 @@ export function logoutUserData() {
 }
 
 export function fetchUserDataSuccess(success) {
-  console.log(success, "i---");
   return {
     type: ActionType.USER_FETCH_SUCCESS,
     success,
@@ -30,7 +29,7 @@ export function createUserData(user) {
 }
 
 //function to request user data
-export function fetchValidateUser(data) {
+export const  fetchValidateUser = (data, navigate) => {
   console.log(data, "test");
   return (dispatch) => {
     // dispatch(fetchUserData(data));
@@ -43,17 +42,22 @@ export function fetchValidateUser(data) {
           fetchUserData({ username: res.data.username, email: res.data.email })
         );
         dispatch(fetchUserDataSuccess(true));
-        localStorage.setItem("user", res.data.username);
+        if (res.data.username) {
+          saveLoginCred(res.data.username);
+        }
+        navigate('/')
       })
       .catch((err) => console.log(err, "fetching user"));
   };
 }
-export function logoutValidateUser() {
+
+export function logoutValidateUser(navigate) {
   return (dispatch) => {
     dispatch(logoutUserData());
     dispatch(fetchUserData({}));
     dispatch(fetchUserDataSuccess(false));
-    localStorage.clear();
+    removeCred("user")
+    navigate("/")
   };
 }
 //function to create new user
