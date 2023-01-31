@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import { CssBaseline, Grid, Modal } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import landingPage from '../images/banner.jpg'
 import './HomePage.css'
 
@@ -21,7 +21,7 @@ function HomePage() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 440,
+    width: 400,
     bgcolor: 'background.paper',
     borderRadius: '15px',
     boxShadow: 24,
