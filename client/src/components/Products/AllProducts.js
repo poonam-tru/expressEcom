@@ -8,6 +8,7 @@ import { getAllProductsData } from "../../actions/products";
 import category from '../../API/category.json'
 
 import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from "@mui/material";
+import Header from "../../pages/Header";
 export default function Allproducts() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.allProducts.products);
@@ -17,6 +18,7 @@ export default function Allproducts() {
 
   return (
     <>
+    <Header />
      <Box sx={{ flexGrow: 1 }} style={{backgroundColor:'#f6f9fc'}}>
       <Typography style={{fontSize:'25px',fontWeight:'bolder',padding:'2rem 0rem 1rem',textAlign:'center'}}>All Products</Typography>
       <Grid container spacing={2} style={{padding:'1rem 0rem 2rem 5rem'}}>
@@ -59,7 +61,7 @@ export default function Allproducts() {
                         backgroundColor: (theme) =>
                           theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
                       }}>
-                        <h3 style={{ margin: 0 , padding: '14px 0px' , borderBottom: '1px solid #ddd'}}>{product.name}</h3>
+                        <h3 style={{ margin: 0 , padding: '14px 0px' , borderBottom: '1px solid #ddd',borderRadius:'10px'}}>{product.name}</h3>
                         {/* <img alt='' style={{ display: 'block', width: '100%' , borderRadius:" 0px 0px 10px 10px"}} src={product.img}/> */}
 
                     </Paper>

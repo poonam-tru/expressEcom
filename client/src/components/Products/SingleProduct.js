@@ -9,6 +9,7 @@ import { getSingleProductsData } from "../../actions/products";
 import { Button } from "@mui/material";
 import { incrementAction,decrementAction } from "../../actions/counter";
 import './SingleProduct.css'
+import Header from "../../pages/Header";
 
 function SingleProduct(props) {
   const [btn , setBtn] = React.useState(true)
@@ -34,6 +35,8 @@ function SingleProduct(props) {
 
   return (
     <div>
+    <Header />
+    <div style={{backgroundColor:'rgb(246, 249, 252)'}}>
       <Card
         sx={{
           display: "flex",
@@ -76,23 +79,23 @@ function SingleProduct(props) {
 
             <div style={{marginTop:'20px'}}>
               <Button variant="contained"
-              style={{minWidth:'50px',marginRight:'20px'}} 
+              style={{minWidth:'50px',marginRight:'13px'}} 
               onClick={handleInc}
               disabled ={product.quantity === count }
               >+</Button>
-
+              <span>{count}</span>
               <Button variant="contained"
-              style={{minWidth:'50px'}}  
+              style={{minWidth:'50px',marginLeft:'13px'}}  
               onClick={handleDec}
               disabled ={count === 0 }
               >-</Button>
-              <p>{count}</p>
 
             </div>
 
           </CardContent>
         </Box>
       </Card>
+      </div>
     </div>
   );
 }
