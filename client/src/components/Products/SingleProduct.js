@@ -10,6 +10,8 @@ import { Button } from "@mui/material";
 import { incrementAction,decrementAction } from "../../actions/counter";
 import './SingleProduct.css'
 import Header from "../../pages/Header";
+import defaultImg from '../../images/img_4.png'
+
 
 function SingleProduct(props) {
   const [btn , setBtn] = React.useState(true)
@@ -36,24 +38,26 @@ function SingleProduct(props) {
   return (
     <div>
     <Header />
-    <div style={{backgroundColor:'rgb(246, 249, 252)'}}>
+    <div style={{backgroundColor:'rgb(246, 249, 252)',height:'90vh'}}>
+    <div style={{padding:'3rem 0rem'}}>
       <Card
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-evenly",
           padding: "25px 0px",
           alignItems: "center",
           maxWidth: 600,
           margin: "auto",
           width: "100%",
         }}
+        style={{backgroundColor:'rgb(246, 249, 252)'}}
       >
-        {/* <CardMedia
+        <CardMedia
           component="img"
-          sx={{ width: "100%" }}
-          image={u.img}
+          sx={{ width: "30%" }}
+          image={defaultImg}
           alt=""
-        /> */}
+        />
 
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CardContent
@@ -95,6 +99,7 @@ function SingleProduct(props) {
           </CardContent>
         </Box>
       </Card>
+      </div>
       </div>
     </div>
   );
