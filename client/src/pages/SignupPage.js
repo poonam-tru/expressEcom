@@ -9,6 +9,7 @@ import Container from "@mui/material/Container";
 import { CssBaseline } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { createNewUser } from "../actions/user";
+import Header from "./Header";
 function SignupPage() {
   //   const [userDetail, setUserDetail] = useState("");
   const dispatch = useDispatch();
@@ -22,8 +23,10 @@ function SignupPage() {
   };
 
   return (
+    <>
+    <Header />
     <div style={{backgroundColor:'#f6f9fc'}}>
-      <Container component="main" maxWidth="xs"style={{padding:'64px 24px 60px'}}>
+      <Container component="main" maxWidth="xs"style={{padding:'44px 24px 22px'}}>
         <CssBaseline />
         <Box
           sx={{
@@ -103,6 +106,7 @@ function SignupPage() {
         </Box>
       </Container>
     </div>
+    </>
   );
 }
 
