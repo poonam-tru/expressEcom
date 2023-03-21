@@ -50,7 +50,7 @@ function Header() {
   return (
     <div>
     {/* <img src={landingPage} alt=''/> */}
-    <div style={{backgroundColor:'white',display:'flex',justifyContent:'space-between',padding:'10px 40px'}}>
+    <div className="header_style">
         <Link to='/products'>
           <Button>All Products</Button>
         </Link>
