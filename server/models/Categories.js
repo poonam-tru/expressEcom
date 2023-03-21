@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema =  mongoose.Schema;
 
 
-const CategoriesSchema = Schema({
+const CategoriesSchema = new Schema({
     cat_name:{
         type: String,
         required: true,

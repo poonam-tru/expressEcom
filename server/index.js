@@ -6,6 +6,7 @@ const UserModel = require("./models/Users");
 const ProductsModel = require("./models/Products");
 const bcrypt = require("bcrypt");
 const CategoriesModel = require("./models/Categories");
+const CartModel = require("./models/Cart");
 
 app.use(express.json());
 app.use(cors());
@@ -56,6 +57,49 @@ app.post("/createUser", async (req, res) => {
   res.json(user);
 });
 
+
+app.get("/categories", (req, res) => {
+  CategoriesModel.find({})
+    .then((result) => {
+      return res.status(200).json(result);
+    })
+    .catch((err) => {
+      return res.status(500).json({ msg: "Unable to access categories" });
+    });
+});
+
+app.post("/cart", (req, res) => {
+  const { productId, quantity, name, price } = req.body;
+  const userId = "63c8ddde6ca24f8ce80b30ab";
+  try{
+    let cart = CartModel.findOne({userId})
+    if(cart){
+      console.log(cart, "cart")
+      let itemIndex =  cart.products.findIndex(p => p.productId === productId);
+      console.log(itemIndex, "item index");
+      if(itemIndex > -1){
+        let productItem = cart.products[itemIndex]
+        productItem.quantity = quantity
+        cart.products[itemIndex] = productItem
+      }else{
+        cart.products.push({productId, quantity, name, price})
+      }
+      cart = cart.save()
+      return res.status(201).send(cart)
+    }else{
+      const newCart  = cart.create({
+        userId,
+        products:[{ productId, quantity, name, price}]
+      })
+      return res.status(201).send(newCart);
+    }
+  }catch(err){
+    console.log(err);
+    res.status(401).json({msg: err})
+  }
+});
+
+
 app.get("/products", (req, res) => {
   ProductsModel.find({}, (err, result) => {
     if (err) {
@@ -65,15 +109,6 @@ app.get("/products", (req, res) => {
       res.json(result);
     }
   });
-});
-app.get("/categories", (req, res) => {
-  CategoriesModel.find({})
-    .then((result) => {
-      return res.status(200).json(result);
-    })
-    .catch((err) => {
-      return res.status(500).json({ msg: "Unable to access categories" });
-    });
 });
 
 app.get("/product/:id", (req, res) => {
