@@ -47,16 +47,15 @@ app.post("/createUser", async (req, res) => {
   console.log("create user1");
   // TODO check if mail & pass both are coming in body
   // TODO check if mail already exists
-  const saltRounds = 10;
-  const plainTextPassword = req.body.password;
-  const hash = bcrypt.hashSync(plainTextPassword, saltRounds);
+  const saltRounds = 10; // for adding etc identity
+  const plainTextPassword = req.body.password; // storing the requested password
+  const hash = bcrypt.hashSync(plainTextPassword, saltRounds); // bcrypt the password
   const user = req.body;
-  user.password = hash;
-  const newUser = new UserModel(user);
-  await newUser.save();
+  user.password = hash; //store the bcrypt password
+  const newUser = new UserModel(user); // create the new user
+  await newUser.save(); // add the new user to database
   res.json(user);
 });
-
 
 app.get("/categories", (req, res) => {
   CategoriesModel.find({})
@@ -68,37 +67,56 @@ app.get("/categories", (req, res) => {
     });
 });
 
-app.post("/cart", (req, res) => {
-  const { productId, quantity, name, price } = req.body;
-  const userId = "63c8ddde6ca24f8ce80b30ab";
-  try{
-    let cart = CartModel.findOne({userId})
-    if(cart){
-      console.log(cart, "cart")
-      let itemIndex =  cart.products.findIndex(p => p.productId === productId);
-      console.log(itemIndex, "item index");
-      if(itemIndex > -1){
-        let productItem = cart.products[itemIndex]
-        productItem.quantity = quantity
-        cart.products[itemIndex] = productItem
-      }else{
-        cart.products.push({productId, quantity, name, price})
-      }
-      cart = cart.save()
-      return res.status(201).send(cart)
-    }else{
-      const newCart  = cart.create({
-        userId,
-        products:[{ productId, quantity, name, price}]
-      })
-      return res.status(201).send(newCart);
+app.post("/cart", async (req, res) => {
+  try {
+    const { products } = req.body;
+    const userId = "63c8ddde6ca24f8ce80b30ab";
+    // Validate input
+    if (!userId || !Array.isArray(products) || products.length === 0) {
+      return res.status(400).json({ message: "Invalid input" });
     }
-  }catch(err){
-    console.log(err);
-    res.status(401).json({msg: err})
+
+    // Check if cart exists for user
+    let cart = await CartModel.findOne({ userId });
+
+    // If cart doesn't exist, create a new one
+    if (!cart) {
+      cart = new CartModel({ userId, products });
+    }
+    // If cart already exists, update the products
+    else {
+      // Loop through the products in the request
+      for (const product of products) {
+        const { productId, quantity, name, price } = product;
+
+        // Check if product already exists in cart
+        const existingProduct = cart.products.find(
+          (p) => p.productId === productId
+        );
+
+        // If product already exists in cart, update the quantity
+        if (existingProduct) {
+          existingProduct.quantity += quantity;
+        }
+        // If product doesn't exist in cart, add it
+        else {
+          cart.products.push({ productId, quantity, name, price });
+        }
+      }
+    }
+
+    // Update the modifiedOn field
+    cart.modifiedOn = Date.now();
+
+    // Save the updated cart
+    await cart.save();
+
+    res.status(200).json({ msg: "Products added to cart" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error adding products to cart" });
   }
 });
-
 
 app.get("/products", (req, res) => {
   ProductsModel.find({}, (err, result) => {
