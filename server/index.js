@@ -7,6 +7,8 @@ const ProductsModel = require("./models/Products");
 const bcrypt = require("bcrypt");
 const CategoriesModel = require("./models/Categories");
 const CartModel = require("./models/Cart");
+const OrderDetailModel = require("./models/OrderDetail");
+const OrderModel = require("./models/Order");
 
 app.use(express.json());
 app.use(cors());
@@ -68,8 +70,10 @@ app.get("/categories", (req, res) => {
 });
 
 app.post("/cart", async (req, res) => {
+  console.log(req.body);
   try {
     const { products } = req.body;
+
     const userId = "63c8ddde6ca24f8ce80b30ab";
     // Validate input
     if (!userId || !Array.isArray(products) || products.length === 0) {
@@ -88,19 +92,44 @@ app.post("/cart", async (req, res) => {
       // Loop through the products in the request
       for (const product of products) {
         const { productId, quantity, name, price } = product;
+        console.log(productId, "product--is");
+        //fetch quantity of product
+        const sku_id = productId;
 
-        // Check if product already exists in cart
-        const existingProduct = cart.products.find(
-          (p) => p.productId === productId
-        );
+        const productDb = await ProductsModel.findOne({ sku_id });
+        console.log(productDb.quantity, "product----");
+        const quantityInDb = productDb.quantity;
 
-        // If product already exists in cart, update the quantity
-        if (existingProduct) {
-          existingProduct.quantity += quantity;
-        }
-        // If product doesn't exist in cart, add it
-        else {
-          cart.products.push({ productId, quantity, name, price });
+        if (quantityInDb <= 0) {
+          return  res.status(401).json({ msg: "Product is not available" });
+        } else {
+          const newQunatity = Math.min(quantity, quantityInDb);
+          console.log(newQunatity);
+          try {
+            console.log(quantityInDb, quantity, "test db quantity");
+            if (quantityInDb > quantity) {
+              console.log(quantityInDb, "condition true");
+
+              // Check if product already exists in cart
+              const existingProduct = cart.products.find(
+                (p) => p.productId === productId
+              );
+
+              // If product already exists in cart, update the quantity
+              if (existingProduct) {
+                existingProduct.quantity += quantity;
+                // existingProduct.price += price * quantity;
+              }
+              // If product doesn't exist in cart, add it
+              else {
+                cart.products.push({ productId, quantity, name, price });
+              }
+            } else {
+              return  res.status(400).json({ msg: "Insuficient Quantity" });
+            }
+          } catch (error) {
+            return res.status(400).json({ msg: "Failed to update" });
+          }
         }
       }
     }
@@ -111,10 +140,74 @@ app.post("/cart", async (req, res) => {
     // Save the updated cart
     await cart.save();
 
-    res.status(200).json({ msg: "Products added to cart" });
+    return res.status(200).json({ msg: "Products added to cart" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: "Error adding products to cart" });
+    return res.status(500).json({ msg: "Error adding products to cart" });
+  }
+});
+
+app.post("/payment", async (res, req) => {
+  const userId = "63c8ddde6ca24f8ce80b30ab";
+  const randomOrderId = "7272728782vvvb";
+  const cartModel = await CartModel.findOne({ userId });
+  const products = cartModel.products;
+  let total = 0;
+
+  for (const product of products) {
+    const { productId, quantity, price } = product;
+    const sku_id = productId;
+    const productDb = await ProductsModel.findOne({ sku_id });
+
+    if (!productDb || productDb.quantity < quantity) {
+      return res.status(401).json({ msg: "Insufficient quantity for product" });
+    }
+
+    try {
+      await ProductsModel.updateOne(
+        { sku_id },
+        { $inc: { quantity: -quantity } }
+      );
+      total += parseInt(price * quantity);
+    } catch (err) {
+      return res.status(400).json({ msg: "Failed to update product quantity" });
+    }
+  }
+  console.log(total, "test total")
+
+  if (total > 0 && true) {
+    console.log(total, "test total---1")
+
+    const order = new OrderModel({
+      userId,
+      orderId: randomOrderId,
+      total,
+      refund_amt: "",
+      status: "In Progress",
+      payment_type: "Cash On delivery",
+      createdAt: Date.now(),
+    });
+
+    const orderDetail = new OrderDetailModel({
+      userId,
+      orderId: randomOrderId,
+      orders: products,
+      total,
+      modifiedOn: Date.now(),
+      createdAt: Date.now(),
+    });
+
+    try {
+      await order.save();
+      await orderDetail.save();
+      console.log('test---order save')
+      res.status(200).json({ msg: "Payment Successful" });
+    } catch (err) {
+      console.log(err,"---- s")
+     return res.status(400).json({ msg: "Failed to create order" });
+    }
+  } else {
+    return res.status(400).json({ msg: "No products in cart" });
   }
 });
 

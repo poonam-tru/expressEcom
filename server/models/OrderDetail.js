@@ -1,20 +1,29 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const CartSchema = new Schema(
+const OrderDetailSchema = new Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
     },
-    products: [
+    orderId: {
+      type: String,
+      required: true,
+    },
+    orders: [
       {
-        productId: String,
+        productId: Number,
         quantity: Number,
         name: String,
         price: Number,
       },
     ],
+  
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
     modifiedOn: {
       type: Date,
       default: Date.now,
@@ -22,6 +31,6 @@ const CartSchema = new Schema(
   },
   { timestamps: true }
 );
-const CartModel = mongoose.model("cart", CartSchema);
+const OrderDetailModel = mongoose.model("orderDetail", OrderDetailSchema);
 
-module.exports = CartModel;
+module.exports = OrderDetailModel;
